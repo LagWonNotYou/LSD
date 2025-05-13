@@ -1,4 +1,4 @@
-//	L.S.D. (Lhamo-Sergi's Dependencies) //DA FINIRE Aggiungere std a tutto, ridefinire funzioni, cambiare i nomi in lowercase
+//	L.S.D. (Lhamo-Sergi's Dependencies) //DA FINIRE Aggiungere std a tutto, ridefinire funzioni, cambiare i nomi in lowercase e aggiungere le linee di data structs di clear, e i # nelle ultime righe
 /*	INDEX 
 	(0)Base
 	(1)Source Code
@@ -90,34 +90,23 @@
 	T sum
 	
 */
-int main() {
-
-return 0;
-}
 
 //(2) MATH FUNCTIONS
 
 bool is_prime(int Number_to_check) {
 	int interval, multiples=0;
 	for(interval=1;interval<=Number_to_check;interval++) {
-		if(Number_to_check%interval==0)
-		multiples++;
+		if(Number_to_check%interval==0) multiples++;
 	}
-	if(multiples==2)
-		return true;
-	else
-		return false;
+	return (multiples == 2);
 }
 
 int abs_val(int Number) {
-		return abs(Number);	
+	return abs(Number);	
 }
 			
-bool is_even(int Number_to_check) {
-	if(Number_to_check%2==0)
-		return true;
-	else
-		return false;	
+bool is_even(int n) {
+	return (n % 2 == 0);
 }
 	
 int fact(int Number) {
@@ -130,72 +119,50 @@ int fact(int Number) {
 	
 int rand_btw(int Random_Number_1,int Random_Number_2) {
 	if(Random_Number_1>Random_Number_2) {
-	swap(Random_Number_1,Random_Number_2);
+		std::swap(Random_Number_1,Random_Number_2);
 	}
 		return rand()%(Random_Number_2-Random_Number_1+1)+Random_Number_1;
 }
 	
-
-int max_btw(int Number_1, int Number_2) {
-	if(Number_1>Number_2)
-		return Number_1;
-	else
-		return Number_2;
-}
-	
-int min_btw(int Number_1, int Number_2) {
-	if(Number_1<Number_2)
-		return Number_1;
-	else
-		return Number_2;
-}
-
 int gap(int Number_1, int Number_2, int Number_3) {
-	return MaxBtw(MaxBtw(Number_1,Number_2),Number_3)-MinBtw(MinBtw(Number_1,Number_2),Number_3);
+	return std::max(std::max(Number_1,Number_2),Number_3)-std::min(std::min(Number_1,Number_2),Number_3);
 }
 
-bool p_sqr(int Number_to_check) {
-	int number;
-	number=sqrt(Number_to_check);
-	if(number*number==Number_to_check)
-		return true;
-	else
-		return false;
+bool p_sqr(int n) {
+	int m = sqrt(n);
+	return (m * m == n);
 }
 
-bool mult_of(int Multiple_to_check, int Number) {
-	if(Multiple_to_check%Number==0)
-		return true;
-	else
-		return false;
+bool mult_of(int n, int mult) {
+	return (n % mult == 0);
 }
 
 //(3) VECTOR FUNCTIONS
 
 void FillVect(int Vector[], int Length) {
-	int interval;
-	for(interval=0;interval<Length;interval++) {
-		cin>>Vector[interval];
+	int i;
+	for(i=0;i<Length;i++) {
+		std::cin>>Vector[i];
 	}
 }
 
 void RandFillVect(int Vector[], int Length, int Random_Number_1, int Random_Number_2) {
 	int interval;
 	if(Random_Number_1>Random_Number_2) {
-		swap(Random_Number_1,Random_Number_2);
+		std::swap(Random_Number_1,Random_Number_2);
 	}
 	for(interval=0;interval<Length;interval++) {
-		Vector[interval]=RandBtw(Random_Number_1,Random_Number_2);
+		Vector[interval]=rand_btw(Random_Number_1,Random_Number_2);
 	}
 }
 
-void  PrintVect(int Vector[], int Length) {
+void PrintVect(int Vector[], int Length) {
 	int interval;
-	cout<<endl;
+	std::cout<<std::endl;
 	for(interval=0;interval<Length;interval++) {
-		cout<<"\t"<<Vector[interval];
+		std::cout<<"\t"<<Vector[interval];
 	}
-	cout<<endl;
+	std::cout<<std::endl;
 }
 
 void ShiftVect(int Vector[], int Length, int Shift_Amount) {
@@ -352,7 +319,7 @@ void IncSelSort(int Vector[], int Length) {
 			}
 		}
 		if(pos_min!=i)									
-			swap(Vector[pos_min],Vector[i]);
+			std::swap(Vector[pos_min],Vector[i]);
 	}
 }
 
@@ -368,7 +335,7 @@ void DecSelSort(int Vector[], int Length) {
 			}
 		}
 		if(pos_max!=i)
-			swap(Vector[pos_max],Vector[i]);
+			std::swap(Vector[pos_max],Vector[i]);
 	}
 }
 
@@ -384,8 +351,8 @@ void ParallelDecSelSort(int Independent_Vector[], int Dependent_Vector[], int Le
 			}
 		}
 		if(pos_max!=i) {
-			swap(Independent_Vector[pos_max],Independent_Vector[i]);
-			swap(Dependent_Vector[pos_max],Dependent_Vector[i]);				
+			std::swap(Independent_Vector[pos_max],Independent_Vector[i]);
+			std::swap(Dependent_Vector[pos_max],Dependent_Vector[i]);				
 		}
 	}
 }
@@ -484,11 +451,7 @@ template<typename T> class matrix {
 		void set(int h, int l, T value) {storage.at((h * length) + l) = value;}
 		void edit_height(int h) {height = h;}
 		void edit_length(int l) {length = l;}
-		void clear() {
-			height = 0;
-			length = 0;
-			storage.clear();
-		}
+		void clear() {storage.clear();}
 		void reset() {for (int i = 0; i < storage.size(); i++) storage[i] = 0;}
 		bool is_square() {return length == height;}
 		std::vector<T> row(int req) {
@@ -550,5 +513,5 @@ template<typename C> std::ostream& operator<< (std::ostream& os, matrix<C>& mx) 
 #endif
 #endif
 #ifndef _GLIBCXX_VECTOR
-#error Missing llibrary: <vector>
+#error Missing library: <vector>
 #endif
