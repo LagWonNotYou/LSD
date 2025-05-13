@@ -1,4 +1,4 @@
-//	L.S.D. (Lhamo-Sergi's Dependencies) //DA FINIRE Aggiungere std a tutto, ridefinire funzioni, cambiare i nomi in lowercase e aggiungere le linee di data structs di clear, e i # nelle ultime righe
+//	L.S.D. (Lhamo-Sergi's Dependencies) //DA FINIRE Ridefinire funzioni, cambiare i nomi in lowercase
 /*	INDEX 
 	(0)Base
 	(1)Source Code
