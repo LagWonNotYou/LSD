@@ -1,4 +1,4 @@
-//	L.S.D. (Lhamo-Sergi's Dependencies) //DA FINIRE Aggiungere std a tutto, ridefinire funzioni, cambiare i nomi in lowercase e aggiungere le linee di data structs di clear, e i # nelle ultime righe
+//	L.S.D. (Lhamo-Sergi's Dependencies) //DA FINIRE Aggiungere std a tutto, ridefinire funzioni, cambiare i nomi in lowercase
 /*	INDEX 
 	(0)Base
 	(1)Source Code
@@ -394,6 +394,7 @@ void ParallelDecSelSort(int Independent_Vector[], int Dependent_Vector[], int Le
 
 //(5) DATA STRUCTS
 
+#ifdef _GLIBCXX_VECTOR
 #ifndef DATA_STRUCTS_GUARD
 #define DATA_STRUCTS_GUARD
 
@@ -483,7 +484,11 @@ template<typename T> class matrix {
 		void set(int h, int l, T value) {storage.at((h * length) + l) = value;}
 		void edit_height(int h) {height = h;}
 		void edit_length(int l) {length = l;}
-		void clear() {storage.clear();}
+		void clear() {
+			height = 0;
+			length = 0;
+			storage.clear();
+		}
 		void reset() {for (int i = 0; i < storage.size(); i++) storage[i] = 0;}
 		bool is_square() {return length == height;}
 		std::vector<T> row(int req) {
@@ -542,4 +547,8 @@ template<typename C> std::ostream& operator<< (std::ostream& os, matrix<C>& mx) 
 	}
 	return os;
 }
+#endif
+#endif
+#ifndef _GLIBCXX_VECTOR
+#error Missing llibrary: <vector>
 #endif
