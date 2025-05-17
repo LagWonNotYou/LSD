@@ -4,25 +4,24 @@
 	(1)Source Code
 	(2)Math
 	(3)Vectors
-	(4)Matrixes
+	(4)Data Structs
 	
 //(0) BASE CONCEPTS AND EXPLENATION
 	explenation of T class, vector<T>, ecc
 	
 //(1) SOURCE CODE	
 
-#include <stdio.h>
-	#include <iostream>
-	#include <cmath>
-	#include <cstdlib>
-	#include <ctime>
-	#include <string>
-	#include <vector>
-	#include <map>
-	#include <set>
-	#include <algorithm>
-	#include <utility>
-	#include <fstream>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <utility>
+#include <fstream>
 	
 #include "LSD.h" //v1
 
@@ -65,30 +64,38 @@
 	void IncSelSort
 	void DecSelSort 
 	void ParallelDecSelSort
-	
-	(3) Matrixes
-	
-	
-	(4) Data Structs
-	vector_plus<T> (constructor, list, vector)
-	vector<T> find_all
-	int find_first
-	int fast_find
-	void sort
-	bool is_sorted
-	void set
-	matrix
-	void edit_height
-	void edit_length
-	vector<T> row
-	vector<T> column
-	void clear
-	void reset
-	bool is_square
-	T get
-	T determinant
-	T sum
-	
+
+	(3) Data Structs
+	vector_plus<T>:
+		vector<T> find_all
+		int find_first
+		int fast_find
+		void sort
+		bool is_sorted
+		operator>> (cin)
+		operator<< (cout)
+	matrix<T>:
+		void randFill
+		void edit_height
+		void edit_length
+		vector<T> row
+		vector<T> column
+		void clear
+		void reset
+		bool is_square
+		void set
+		T get
+		T determinant
+		T sum
+		T max
+		T min
+		int max_pos
+		int min_pos
+		int* data
+		vector<T>::iterator begin
+		vector<T>::iterator end
+		operator= 
+		operator<< (cout)
 */
 
 //(2) MATH FUNCTIONS
@@ -102,7 +109,7 @@ bool is_prime(int Number_to_check) {
 }
 
 int abs_val(int Number) {
-	return abs(Number);	
+	return abs(Number);
 }
 			
 bool is_even(int n) {
@@ -357,9 +364,7 @@ void ParallelDecSelSort(int Independent_Vector[], int Dependent_Vector[], int Le
 	}
 }
 
-//(4) MATRIX FUNCTIONS
-
-//(5) DATA STRUCTS
+//(4) DATA STRUCTS
 
 #ifdef _GLIBCXX_VECTOR
 #ifndef DATA_STRUCTS_GUARD
@@ -375,13 +380,11 @@ template<class T> class vector_plus : public std::vector<T> {
 	public:
 		vector_plus<T>() {
 		}
-		
 		vector_plus<T>(std::initializer_list<T> init) {
 			for (typename std::initializer_list<T>::iterator i = init.begin(); i < init.end(); i++) {
 				this->push_back(*i);
 			}
-		}
-		
+		}		
 		vector_plus<T>(std::vector<T> vc) {
 			for (typename std::vector<T>::iterator i = vc.begin(); i < vc.end(); i++) {
 				this->push_back(*i);
@@ -446,6 +449,29 @@ template<typename T> class matrix {
 			}
 			else throw std::invalid_argument("Matrix initialization failed: size error");
 		}
+		matrix& operator=(const std::initializer_list<T>& init) {
+			if (init.size() == storage.size()) {
+				int i = 0;
+				for (typename std::initializer_list<T>::iterator it = init.begin(); it != init.end(); it++) {
+					storage.at(i) == *it;
+					i++;
+				}
+			}
+			else {
+				throw std::invalid_argument("Matrix assignment failed: size error");
+			}
+			return *this;
+		}
+		void randFill(int lb = -1, int ub = 1) {
+			#ifdef _GLIBCXX_CSTDLIB
+			for (typename std::vector<T>::iterator it = storage.begin(); it != storage.end(); it++) {
+				*it = (rand() % (ub - lb + 1)) + lb;
+			}
+			#endif
+			#ifndef _GLIBCXX_CSTDLIB
+			throw std::runtime_error("Missing library: <cstdlib>");
+			#endif
+		}
 		template<typename C> friend std::ostream& operator<< (std::ostream&, matrix<C>&);
 		T get(int h, int l) {return storage.at((h * length) + l);}
 		void set(int h, int l, T value) {storage.at((h * length) + l) = value;}
@@ -469,7 +495,7 @@ template<typename T> class matrix {
 			return out;
 		}
 		T determinant() {
-			if (!is_square()) throw std::range_error("Non-square matrix has no determinant");
+			if (!is_square()) throw std::runtime_error("Non-square matrix has no determinant");
 			if (height > 3) throw std::runtime_error("Nuh uh (determinant is available up to 3x3)");
 			switch (height) {
 				case 1:
@@ -485,6 +511,45 @@ template<typename T> class matrix {
 			int out = 0;
 			for (int t : storage) out += t;
 			return out;
+		}
+		T max() {
+			int m = 0;
+			for (int t : storage) if (t > m) m = t;
+			return m;
+		}
+		T min() {
+			int m = storage[0];
+			for (int t : storage) if (t < m) m = t;
+			return m;
+		}
+		int max_pos() {
+			int pos = 1, m = storage[0];
+			for (int i = 1; i < storage.size(); i++) {
+				if (storage[i] > m) {
+					pos = i;
+					m = storage[i];
+				}
+			}
+			return pos;
+		}
+		int min_pos() {
+			int pos = 1, m = storage[0];
+			for (int i = 1; i < storage.size(); i++) {
+				if (storage[i] < m) {
+					pos = i;
+					m = storage[i];
+				}
+			}
+			return pos;
+		}
+		int* data() {
+			return storage.data();
+		}
+		typename std::vector<T>::iterator begin() {
+			return storage.begin();
+		}
+		typename std::vector<T>::iterator end() {
+			return storage.end();
 		}
 };
 
@@ -511,7 +576,4 @@ template<typename C> std::ostream& operator<< (std::ostream& os, matrix<C>& mx) 
 	return os;
 }
 #endif
-#endif
-#ifndef _GLIBCXX_VECTOR
-#error Missing library: <vector>
 #endif
