@@ -91,10 +91,10 @@
 		T min
 		int max_pos
 		int min_pos
-		int* data
+		T* data
 		vector<T>::iterator begin
 		vector<T>::iterator end
-		operator= 
+		operator= (initializer list, other matrix)
 		operator<< (cout)
 */
 
