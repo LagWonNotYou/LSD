@@ -453,9 +453,18 @@ template<typename T> class matrix {
 			if (init.size() == storage.size()) {
 				int i = 0;
 				for (typename std::initializer_list<T>::iterator it = init.begin(); it != init.end(); it++) {
-					storage.at(i) == *it;
+					storage.at(i) = *it;
 					i++;
 				}
+			}
+			else {
+				throw std::invalid_argument("Matrix assignment failed: size error");
+			}
+			return *this;
+		}
+		matrix& operator=(matrix<T>& mx) {
+			if (storage.size() == mx.storage.size()) {
+				storage = mx.storage;
 			}
 			else {
 				throw std::invalid_argument("Matrix assignment failed: size error");
