@@ -552,7 +552,7 @@ template<typename T> class matrix {
 			}
 			return pos;
 		}
-		int* data() {
+		T* data() {
 			return storage.data();
 		}
 		typename std::vector<T>::iterator begin() {
