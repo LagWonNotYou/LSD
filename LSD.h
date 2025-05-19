@@ -98,6 +98,9 @@
 		operator<< (cout)
 */
 
+#ifndef _GLIBCXX_LSD
+#define _GLIBCXX_LSD 1
+
 //(2) MATH FUNCTIONS
 
 bool is_prime(int Number_to_check) {
@@ -367,8 +370,6 @@ void ParallelDecSelSort(int Independent_Vector[], int Dependent_Vector[], int Le
 //(4) DATA STRUCTS
 
 #ifdef _GLIBCXX_VECTOR
-#ifndef DATA_STRUCTS_GUARD
-#define DATA_STRUCTS_GUARD
 
 template<typename T> using func = bool (T, T);
 
