@@ -78,24 +78,29 @@
 		void randFill
 		void edit_height
 		void edit_length
-		vector<T> row
-		vector<T> column
 		void clear
 		void reset
-		bool is_square
 		void set
+		bool is_square
+		bool check
+		int max_pos
+		int min_pos
+		int count
+		int size
 		T get
 		T determinant
 		T sum
 		T max
 		T min
-		int max_pos
-		int min_pos
+		vector<T> row
+		vector<T> column
 		T* data
 		vector<T>::iterator begin
 		vector<T>::iterator end
 		operator= (initializer list, other matrix)
 		operator<< (cout)
+		operator>> (cin)
+		operator[]
 */
 
 #ifndef _GLIBCXX_LSD
@@ -435,12 +440,12 @@ template<typename T> class matrix {
 		int height, length;
 		std::vector<T> storage;
 	public:
-		matrix(int h, int l) {
+		matrix (int h, int l) {
 			length = l;
 			height = h;
 			for (int i = 0; i < h * l; i++) storage.push_back(0);
 		}
-		matrix(int h, int l, std::initializer_list<T> init) {
+		matrix (int h, int l, std::initializer_list<T> init) {
 			length = l;
 			height = h;
 			if (init.size() == (h * l)) {
@@ -450,7 +455,7 @@ template<typename T> class matrix {
 			}
 			else throw std::invalid_argument("Matrix initialization failed: size error");
 		}
-		matrix& operator=(const std::initializer_list<T>& init) {
+		matrix& operator= (const std::initializer_list<T>& init) {
 			if (init.size() == storage.size()) {
 				int i = 0;
 				for (typename std::initializer_list<T>::iterator it = init.begin(); it != init.end(); it++) {
@@ -463,7 +468,7 @@ template<typename T> class matrix {
 			}
 			return *this;
 		}
-		matrix& operator=(matrix<T>& mx) {
+		matrix& operator= (matrix<T>& mx) {
 			if (storage.size() == mx.storage.size()) {
 				storage = mx.storage;
 			}
@@ -472,6 +477,7 @@ template<typename T> class matrix {
 			}
 			return *this;
 		}
+		std::vector<T> operator[] (int q) {return row(q);}
 		void randFill(int lb = -1, int ub = 1) {
 			#ifdef _GLIBCXX_CSTDLIB
 			for (typename std::vector<T>::iterator it = storage.begin(); it != storage.end(); it++) {
@@ -483,13 +489,18 @@ template<typename T> class matrix {
 			#endif
 		}
 		template<typename C> friend std::ostream& operator<< (std::ostream&, matrix<C>&);
+		template<typename C> friend std::istream& operator>> (std::istream&, matrix<C>&);
 		T get(int h, int l) {return storage.at((h * length) + l);}
 		void set(int h, int l, T value) {storage.at((h * length) + l) = value;}
 		void edit_height(int h) {height = h;}
 		void edit_length(int l) {length = l;}
-		void clear() {storage.clear();}
 		void reset() {for (int i = 0; i < storage.size(); i++) storage[i] = 0;}
 		bool is_square() {return length == height;}
+		void clear() {
+			height = 0;
+			length = 0;
+			storage.clear();
+		}
 		std::vector<T> row(int req) {
 			std::vector<T> out;
 			for (int i = 0; i < length; i++) {
@@ -552,15 +563,19 @@ template<typename T> class matrix {
 			}
 			return pos;
 		}
-		T* data() {
-			return storage.data();
+		int count(int q) {
+			int c = 0;
+			for (int t : storage) if (t == q) c++;
+			return c;
 		}
-		typename std::vector<T>::iterator begin() {
-			return storage.begin();
+		bool check(int q) {
+			for (int t : storage) if (t == q) return true;
+			return false;
 		}
-		typename std::vector<T>::iterator end() {
-			return storage.end();
-		}
+		int size() {return storage.size();}
+		T* data() {return storage.data();}
+		typename std::vector<T>::iterator begin() {return storage.begin();}
+		typename std::vector<T>::iterator end() {return storage.end();}
 };
 
 template<class C> std::ostream& operator<<(std::ostream& os, const vector_plus<C>& vc) {
@@ -578,12 +593,21 @@ template<class C> std::istream& operator>>(std::istream& is, vector_plus<C>& vc)
 }
 
 template<typename C> std::ostream& operator<< (std::ostream& os, matrix<C>& mx) {
-	for (int i = 1; i <= mx.storage.size(); i++) {
+	for (int i = 1; i <= mx.size(); i++) {
 		os << mx.storage[i - 1];
 		if (i % mx.length == 0) os << std::endl;
 		else os << ' ';
 	}
 	return os;
+}
+
+template<typename C> std::istream& operator>> (std::istream& is, matrix<C>& mx) {
+	int temp;
+	for (int i = 0; i < mx.size(); i++) {
+		is >> temp;
+		mx.storage.at(i) = temp;
+	}
+	return is;
 }
 #endif
 #endif
