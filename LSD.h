@@ -5,10 +5,10 @@
 	(2)Math
 	(3)Vectors
 	(4)Data Structs
-	
+
 //(0) BASE CONCEPTS AND EXPLENATION
 	explenation of T class, vector<T>, ecc
-	
+
 //(1) SOURCE CODE	
 
 #include <iostream>
@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <utility>
 #include <fstream>
-	
+
 #include "LSD.h" //v1
 
 /*  Function List
@@ -30,7 +30,7 @@
 	(0) Base
 	void help
 	void function_list
-	
+
 	(1) Math
 	bool is_prime
 	bool is_even
@@ -42,7 +42,7 @@
 	int rand_btw
 	int max_btw
 	int min_btw 
-	
+
 	(2) Vectors
 	void fill_vect
 	void rand_fill_vect
@@ -108,12 +108,12 @@
 
 //(2) MATH FUNCTIONS
 
-bool is_prime(int Number_to_check) {
-	int interval, multiples=0;
-	for(interval=1;interval<=Number_to_check;interval++) {
-		if(Number_to_check%interval==0) multiples++;
+bool is_prime(int n) {
+	if (n == 1 || n == 0) return false;
+	for (int i = 2; i < ceil(sqrt(n)); i++) {
+		if (n % i == 0) return false;
 	}
-	return (multiples == 2);
+	return true;
 }
 
 int abs_val(int Number) {
@@ -124,12 +124,9 @@ bool is_even(int n) {
 	return (n % 2 == 0);
 }
 	
-int fact(int Number) {
-	int interval, result=1;
-	for(interval=2;interval<=Number;interval++) {
-	result=result*interval;	
-	}
-		return result;
+int fact(int n) {
+	if (n < 2) return 1;
+	return n * fact(n - 1);
 }
 	
 int rand_btw(int Random_Number_1,int Random_Number_2) {
@@ -602,10 +599,8 @@ template<typename C> std::ostream& operator<< (std::ostream& os, matrix<C>& mx) 
 }
 
 template<typename C> std::istream& operator>> (std::istream& is, matrix<C>& mx) {
-	int temp;
 	for (int i = 0; i < mx.size(); i++) {
-		is >> temp;
-		mx.storage.at(i) = temp;
+		is >> mx.storage.at(i);
 	}
 	return is;
 }
